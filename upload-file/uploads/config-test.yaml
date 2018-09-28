@@ -1,0 +1,46 @@
+issuer: http://10.100.100.147:5556
+storage:
+  type: sqlite3
+  config:
+    file: examples/dex.db
+web:
+  http: 0.0.0.0:5556
+
+connectors:
+- type: ldap
+  name: OpenLDAP
+  id: ldap
+  config:
+    host: 10.10.103.35:10389
+    insecureNoSSL: true
+    bindDN: cn=admin,dc=example,dc=org
+    bindPW: admin
+    usernamePrompt: Email Address
+    userSearch:
+      baseDN: ou=People,dc=example,dc=org
+      filter: "(objectClass=person)"
+      username: mail
+      idAttr: DN
+      emailAttr: mail
+      nameAttr: cn
+    groupSearch:
+      baseDN: ou=Groups,dc=example,dc=org
+      filter: "(objectClass=groupOfNames)"
+      userAttr: DN
+      groupAttr: member
+      nameAttr: cn
+- type: github
+  id: github
+  name: GitHub
+  config:
+    clientID: 97ce03080e6500ff5a84
+    clientSecret: db34eac7d725790f130af0170822f7c575989eb5
+    redirectURI: http://10.100.100.147:5556/callback
+
+
+staticClients:
+- id: example-app
+  redirectURIs:
+  - 'http://10.100.100.99:5555/callback'
+  name: 'Example App'
+  secret: ZXhhbXBsZS1hcHAtc2VjcmV0
